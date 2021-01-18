@@ -70,14 +70,9 @@ function MovieCard({
         <Text maxWidth="25em" noOfLines={4} marginBottom={16}>
           {Plot}
         </Text>
-        <Flex
-          justifyContent="space-between"
-          width="100%"
-          maxWidth="25em"
-          marginBottom={6}
-        >
+        <Flex width="100%" maxWidth="25em" marginBottom={6}>
           {Genre.split(', ').map(genre => (
-            <Tag key={genre} variant="solid" colorScheme="teal">
+            <Tag marginRight={3} key={genre} variant="solid" colorScheme="teal">
               <TagLabel>{genre}</TagLabel>
             </Tag>
           ))}
