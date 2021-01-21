@@ -1,3 +1,4 @@
+// @flow
 import * as React from 'react';
 import {
   ChakraProvider,
@@ -14,30 +15,31 @@ import MovieCard from './components/MovieCard';
 import Header from './components/Header';
 import createPersistedState from 'use-persisted-state';
 import { hasProperty } from './utils';
-
+import type { MovieType, MoviesInCardType } from './constants';
 // moviesInCart is the key used to store the movie state in local storage
 const useMoviesInCartState = createPersistedState('moviesInCart');
 
-function App() {
+function App(): React$Element<*> {
   const displayMobileCard = useBreakpointValue({
     base: true,
     lg: false,
   });
-  const [moviesInCart, setMoviesInCart] = useMoviesInCartState({});
+  const [
+    moviesInCart,
+    setMoviesInCart,
+  ] = useMoviesInCartState<MoviesInCardType>({});
 
-  function handleAddMovieToCart(movie) {
-    if (movie && !hasProperty(moviesInCart, movie?.imdbID)) {
-      // we don't need to store all the movie info, just title and id.
-      const { imdbID, Title } = movie;
-      const newMoviesInCart = {
-        ...moviesInCart,
-        [imdbID]: { imdbID, Title },
-      };
-      setMoviesInCart(newMoviesInCart);
-    }
+  function handleAddMovieToCart(movie: MovieType) {
+    // we don't need to store all the movie info, just title and id.
+    const { imdbID, Title } = movie;
+    const newMoviesInCart = {
+      ...moviesInCart,
+      [imdbID]: { imdbID, Title },
+    };
+    setMoviesInCart(newMoviesInCart);
   }
 
-  function handleRemoveMovieFromCart(movie) {
+  function handleRemoveMovieFromCart(movie: MovieType): boolean {
     if (movie && hasProperty(moviesInCart, movie?.imdbID)) {
       const newMoviesInCart = { ...moviesInCart };
       delete newMoviesInCart[movie.imdbID];
@@ -88,7 +90,7 @@ function App() {
   );
 }
 
-function AppWithProviders() {
+function AppWithProviders(): React$Element<*> {
   return (
     <ChakraProvider theme={theme}>
       <Router>

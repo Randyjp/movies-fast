@@ -1,13 +1,22 @@
+// @flow
 import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import useMoviesAPI, { STATUS } from '../hooks/useMoviesAPI';
 import LoadingSpinner from './LoadingSpinner';
-import PropTypes from 'prop-types';
 import MessageWithIcon from './MessageWithIcon';
 import { WarningIcon } from '@chakra-ui/icons';
 import { hasProperty } from '../utils';
+import type { MoviesInCardType } from '../constants';
 
-function MovieDetails({ children, moviesInCart }) {
+type MovieDetailsPropsType = {|
+  moviesInCart: MoviesInCardType,
+  children: React.Element<*>,
+|};
+
+function MovieDetails({
+  children,
+  moviesInCart,
+}: MovieDetailsPropsType): React$Element<*> {
   const { movieId } = useParams();
   const { status, data: movie, errorMessage } = useMoviesAPI({ movieId });
 
@@ -30,15 +39,13 @@ function MovieDetails({ children, moviesInCart }) {
       isMovieInCart: hasProperty(moviesInCart, movie?.imdbID),
     });
   }
-}
 
-MovieDetails.propTypes = {
-  movieIdsInCart: PropTypes.objectOf(
-    PropTypes.shape({
-      Title: PropTypes.string.isRequired,
-      imdbID: PropTypes.string.isRequired,
-    })
-  ),
-};
+  return (
+    <MessageWithIcon
+      Icon={<WarningIcon boxSize="2.5em" color="red.400" />}
+      message={`Something went wrong. Please try again`}
+    />
+  );
+}
 
 export default MovieDetails;

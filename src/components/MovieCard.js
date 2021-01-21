@@ -1,3 +1,4 @@
+//@flow
 import * as React from 'react';
 import {
   Heading,
@@ -9,15 +10,22 @@ import {
   TagLabel,
   AspectRatio,
 } from '@chakra-ui/react';
-import PropTypes from 'prop-types';
 import ActionButtons from './ActionButtons';
+import { type MovieType } from '../constants';
+
+type MovieCardPropType = {|
+  movie: MovieType,
+  addMovieToCart: (movie: MovieType) => void,
+  deleteMovieFromCart: (movie: MovieType) => boolean,
+  isMovieInCart?: boolean,
+|};
 
 function MovieCard({
   movie,
   addMovieToCart,
   deleteMovieFromCart,
   isMovieInCart = false,
-}) {
+}: MovieCardPropType): React$Element<*> {
   const {
     Plot,
     Title,
@@ -71,7 +79,7 @@ function MovieCard({
           {Plot}
         </Text>
         <Flex width="100%" maxWidth="25em" marginBottom={6}>
-          {Genre.split(', ').map(genre => (
+          {Genre.split(', ').map((genre: string) => (
             <Tag marginRight={3} key={genre} variant="solid" colorScheme="teal">
               <TagLabel>{genre}</TagLabel>
             </Tag>
@@ -88,21 +96,5 @@ function MovieCard({
     </Flex>
   );
 }
-
-MovieCard.propTypes = {
-  movie: PropTypes.shape({
-    Title: PropTypes.string.isRequired,
-    imdbID: PropTypes.string.isRequired,
-    Plot: PropTypes.string.isRequired,
-    Poster: PropTypes.string.isRequired,
-    Rated: PropTypes.string.isRequired,
-    Released: PropTypes.string.isRequired,
-    Genre: PropTypes.string.isRequired,
-    imdbRating: PropTypes.string.isRequired,
-  }),
-  deleteMovieFromCart: PropTypes.func.isRequired,
-  addMovieToCart: PropTypes.func.isRequired,
-  isMovieInCart: PropTypes.bool,
-};
 
 export default MovieCard;
